@@ -1,31 +1,83 @@
+{% load static %}
 <html>
     <head>
+        <link rel="stylesheet" href="{% static 'css/table.css'%}">
+        
         <title>
             Excel file upload and processing : Django Example : ThePythonDjango.Com
         </title>
+        
     </head>
     <body style="margin-top: 30px;margin-left: 30px;">
-        <form action="{% url "myapp:index" %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file"
-                   title="Upload excel file"
-                   name="excel_file"
-                   style="border: 1px solid black; padding: 5px;"
-                   required="required">
-            <p>
-            <input type="submit"
-                   value="Upload"
-                   style="border: 1px solid green; padding:5px; border-radius: 2px; cursor: pointer;">
-        </form>
 
-        <p></p>
+        <img src="{% static 'img/TO_logo.png' %} " height="400px" width="400px" class="center">
+
+        <p>
+        
+            <form action="{% url "myapp:index" %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file"
+                    {% comment %} title="Upload excel file" {% endcomment %}
+                    name="excel_file"
+                    {% comment %} style="border: 1px solid black; padding: 5px;" {% endcomment %}
+                    required="required">
+                <p>
+                <input type="submit"
+                    value="Загрузить и рассчитать"
+                    
+            </form>
+
+
+        </p>
+
+        <p> 
+            
+            <a id="result" href="/myapp/templates/myapp/result.xlsx" download> 
+                <h2> result.xlsx   </h2> 
+                               
+
+                
+            </a>
+            <h3> last_modified ={{last_modified}} </h3>
+            <h3> created ={{created}} </h3>
+        </p>
+
         <hr>
 
-        {% for row in excel_data %}
+        <h2> Краткое содержание загруженного файла </h2>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    {% for cell in df_first_row %}
+                    <th> {{ cell }} </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for row in df_rest_rows %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }} </td>
+                    {% endfor %}
+                    
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+        
+        
+        {% comment %} {% for row in excel_data %}
             {% for cell in row %}
                 {{ cell }}&nbsp;&nbsp;
             {% endfor %}
             <br>
-        {% endfor %}
+        {% endfor %} {% endcomment %}
+
+        
     </body>
+
+    
 </html>
